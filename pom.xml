@@ -46,10 +46,10 @@
                 <version>${pitest.version}</version>
                 <configuration>
                     <targetClasses>
-                        <param>examples.Calculator*</param>
+                        <param>examples.Account*</param>
                     </targetClasses>
                     <targetTests>
-                        <param>examples.CalculatorTest*</param>
+                        <param>examples.AccountTest*</param>
                     </targetTests>
                 </configuration>
             </plugin>

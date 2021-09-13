@@ -25,7 +25,7 @@ public class AccountTest {
     }
 
     @Test
-    public void overdrawFromCheckingAccount_shouldBePossible() throws WithdrawException{
+    public void overdrawFromCheckingAccount_shouldBePossible() throws WithdrawException {
 
         Account account = new Account(AccountType.CHECKING);
 
@@ -44,5 +44,17 @@ public class AccountTest {
         account.deposit(30);
 
         assertThrows(WithdrawException.class, () -> account.withdraw(40));
+    }
+
+    @Test
+    public void addInterestToSavingsAccount_shouldResultInUpdatedBalance() throws AddInterestException {
+
+        Account account = new Account(AccountType.SAVINGS);
+
+        account.deposit(100);
+
+        account.addInterest(0.05);
+
+        assertEquals(105, account.getBalance());
     }
 }

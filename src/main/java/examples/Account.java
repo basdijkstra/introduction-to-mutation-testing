@@ -37,13 +37,20 @@ public class Account {
         this.balance -= amountToWithdraw;
     }
 
-    public void addInterest(double interestRate) throws AddInterestException {
+    public void addInterest() throws AddInterestException {
 
-        if (this.type.equals(AccountType.SAVINGS)) {
-            this.balance *= (1 + interestRate);
+        if (this.type.equals(AccountType.CHECKING)) {
+            throw new AddInterestException("Cannot add interest to a checking account");
+        }
+
+        if (this.balance < 1000) {
+            this.balance *= 1.01; // 1% interest
+        }
+        else if (this.balance > 1000 && this.balance < 5000) {
+            this.balance *= 1.02; // 2% interest
         }
         else {
-            throw new AddInterestException("Cannot add interest to a checking account");
+            this.balance *= 1.03; // 3% interest
         }
     }
 }

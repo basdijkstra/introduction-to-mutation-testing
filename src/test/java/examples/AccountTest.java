@@ -1,6 +1,8 @@
 package examples;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -46,15 +48,16 @@ public class AccountTest {
         assertThrows(WithdrawException.class, () -> account.withdraw(40));
     }
 
-    @Test
-    public void addInterestToSavingsAccount_shouldResultInUpdatedBalance() throws AddInterestException {
+    @ParameterizedTest
+    @CsvSource({"100, 101", "2000, 2040", "6000, 6180"})
+    public void addInterestToSavingsAccount_shouldResultInUpdatedBalance(int originalBalance, int expectedNewBalance) throws AddInterestException {
 
         Account account = new Account(AccountType.SAVINGS);
 
-        account.deposit(100);
+        account.deposit(originalBalance);
 
-        account.addInterest(0.05);
+        account.addInterest();
 
-        assertEquals(105, account.getBalance());
+        assertEquals(expectedNewBalance, account.getBalance());
     }
 }

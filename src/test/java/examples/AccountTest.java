@@ -39,6 +39,18 @@ public class AccountTest {
     }
 
     @Test
+    public void withdrawFromSavingsAccount_shouldResultInUpdatedBalance() throws WithdrawException {
+
+        Account account = new Account(AccountType.SAVINGS);
+
+        account.deposit(30);
+
+        account.withdraw(20);
+
+        assertEquals(10, account.getBalance());
+    }
+
+    @Test
     public void overdrawFromSavingsAccount_shouldThrowWithdrawException() {
 
         Account account = new Account(AccountType.SAVINGS);

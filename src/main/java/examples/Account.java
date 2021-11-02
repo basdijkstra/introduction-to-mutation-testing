@@ -6,11 +6,15 @@ public class Account {
     private final int number;
     private double balance;
 
+    private boolean interestAdded;
+
     public Account(AccountType type) {
 
         this.type = type;
-        this.number = (int) (Math.random() * (100000 - 10000)) + 10000; // 10000-99999
+        this.number = BankingUtils.generateAccountNumber();
         this.balance = 0;
+
+        this.interestAdded = false;
     }
 
     public int getNumber() {
@@ -52,5 +56,12 @@ public class Account {
         else {
             this.balance *= 1.03; // 3% interest
         }
+
+        setInterestAdded(true);
+    }
+
+    private void setInterestAdded(boolean value) {
+
+        this.interestAdded = value;
     }
 }

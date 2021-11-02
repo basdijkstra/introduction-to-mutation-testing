@@ -27,6 +27,11 @@ public class Account {
         return this.balance;
     }
 
+    public boolean getInterestAdded() {
+
+        return this.interestAdded;
+    }
+
     public void deposit(double amountToDeposit) {
 
         this.balance += amountToDeposit;

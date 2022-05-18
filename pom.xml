@@ -13,7 +13,7 @@
         <maven.compiler.target>14</maven.compiler.target>
         <junit.version>5.7.2</junit.version>
         <maven.surefire.plugin.version>3.0.0-M5</maven.surefire.plugin.version>
-        <pitest.version>1.6.9</pitest.version>
+        <pitest.version>1.7.6</pitest.version>
         <pitest.junit5.plugin.version>0.14</pitest.junit5.plugin.version>
     </properties>
 

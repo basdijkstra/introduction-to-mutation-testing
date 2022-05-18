@@ -1,13 +1,25 @@
 package examples;
 
+import java.time.LocalDateTime;
+
 public class Transaction {
 
+    private LocalDateTime timestamp;
     private TransactionType type;
     private double amount;
 
-    public Transaction(TransactionType type, double amount) {
+    public Transaction(LocalDateTime timestamp, TransactionType type, double amount) {
+        this.timestamp = timestamp;
         this.type = type;
         this.amount = amount;
+    }
+
+    public LocalDateTime getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(LocalDateTime timestamp) {
+        this.timestamp = timestamp;
     }
 
     public TransactionType getType() {

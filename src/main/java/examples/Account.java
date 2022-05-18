@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class Account {
 
@@ -11,8 +12,8 @@ public class Account {
     private final int number;
     private double balance;
 
-    private Map<String, Transaction> transactionList = new HashMap<String, Transaction>();
-    private TransactionProcessor transactionProcessor = new TransactionProcessor();
+    private final Map<String, Transaction> transactionList = new HashMap<String, Transaction>();
+    private final TransactionProcessor transactionProcessor = new TransactionProcessor();
 
     private boolean interestAdded;
 
@@ -32,11 +33,23 @@ public class Account {
         return this.balance;
     }
 
+    public void printTransactionList() {
+
+        this.transactionProcessor.print(this.transactionList);
+    }
+
     public void deposit(double amountToDeposit) {
 
         this.balance += amountToDeposit;
 
-        transactionProcessor.addTransactionToList(new Transaction(TransactionType.DEPOSIT, amountToDeposit));
+        transactionProcessor.addTransactionToList(
+                this.transactionList,
+                new Transaction(
+                        LocalDateTime.now(),
+                        TransactionType.DEPOSIT,
+                        amountToDeposit
+                )
+        );
     }
 
     public void withdraw(double amountToWithdraw) throws WithdrawException {
@@ -47,7 +60,14 @@ public class Account {
 
         this.balance -= amountToWithdraw;
 
-        transactionProcessor.addTransactionToList(new Transaction(TransactionType.WITHDRAWAL, amountToWithdraw));
+        transactionProcessor.addTransactionToList(
+                this.transactionList,
+                new Transaction(
+                        LocalDateTime.now(),
+                        TransactionType.WITHDRAWAL,
+                        amountToWithdraw
+                )
+        );
     }
 
     public void addInterest() throws AddInterestException {
@@ -72,16 +92,5 @@ public class Account {
     private void setInterestAdded(boolean value) {
 
         this.interestAdded = value;
-    }
-
-    private class TransactionProcessor {
-
-        public void addTransactionToList(Transaction transaction) {
-
-            String dateTimeFormat = "yyyy/MM/dd HH:mm:ss";
-            DateTimeFormatter dtf = DateTimeFormatter.ofPattern(dateTimeFormat);
-
-            transactionList.put(dtf.format(LocalDateTime.now()), transaction);
-        }
     }
 }

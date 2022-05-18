@@ -52,6 +52,9 @@
                 <artifactId>pitest-maven</artifactId>
                 <version>${pitest.version}</version>
                 <configuration>
+                    <mutators>
+                        <mutator>DEFAULTS</mutator>
+                    </mutators>
                     <targetClasses>
                         <param>examples.*</param>
                     </targetClasses>

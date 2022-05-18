@@ -1,25 +1,28 @@
 package examples;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.Map;
+
 public class Account {
 
     private final AccountType type;
     private final int number;
     private double balance;
 
+    private Map<String, Transaction> transactionList = new HashMap<String, Transaction>();
+    private TransactionProcessor transactionProcessor = new TransactionProcessor();
+
     private boolean interestAdded;
 
     public Account(AccountType type) {
 
         this.type = type;
-        this.number = BankingUtils.generateAccountNumber();
+        this.number = 12345;
         this.balance = 0;
 
         this.interestAdded = false;
-    }
-
-    public int getNumber() {
-
-        return this.number;
     }
 
     public double getBalance() {
@@ -27,14 +30,11 @@ public class Account {
         return this.balance;
     }
 
-    public boolean getInterestAdded() {
-
-        return this.interestAdded;
-    }
-
     public void deposit(double amountToDeposit) {
 
         this.balance += amountToDeposit;
+
+        transactionProcessor.addTransactionToList(new Transaction(TransactionType.DEPOSIT, amountToDeposit));
     }
 
     public void withdraw(double amountToWithdraw) throws WithdrawException {
@@ -44,6 +44,8 @@ public class Account {
         }
 
         this.balance -= amountToWithdraw;
+
+        transactionProcessor.addTransactionToList(new Transaction(TransactionType.WITHDRAWAL, amountToWithdraw));
     }
 
     public void addInterest() throws AddInterestException {
@@ -55,7 +57,7 @@ public class Account {
         if (this.balance < 1000) {
             this.balance *= 1.01; // 1% interest
         }
-        else if (this.balance > 1000 && this.balance < 5000) {
+        else if (this.balance < 5000) {
             this.balance *= 1.02; // 2% interest
         }
         else {
@@ -68,5 +70,16 @@ public class Account {
     private void setInterestAdded(boolean value) {
 
         this.interestAdded = value;
+    }
+
+    private class TransactionProcessor {
+
+        public void addTransactionToList(Transaction transaction) {
+
+            String dateTimeFormat = "yyyy/MM/dd HH:mm:ss";
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern(dateTimeFormat);
+
+            transactionList.put(dtf.format(LocalDateTime.now()), transaction);
+        }
     }
 }

@@ -9,14 +9,6 @@ import static org.junit.jupiter.api.Assertions.*;
 public class AccountTest {
 
     @Test
-    public void createAccount_numberShouldBeBetween10000And99999() {
-
-        Account account = new Account(AccountType.CHECKING);
-
-        assertTrue(10000 <= account.getNumber() && account.getNumber() <= 99999 );
-    }
-
-    @Test
     public void deposit100_checkBalance_shouldBe100() {
 
         Account account = new Account(AccountType.CHECKING);

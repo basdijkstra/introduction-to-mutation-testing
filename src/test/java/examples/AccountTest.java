@@ -54,7 +54,7 @@ public class AccountTest {
 
     @ParameterizedTest
     @CsvSource({"100, 101", "2000, 2040", "6000, 6180"})
-    public void addInterestToSavingsAccount_shouldResultInUpdatedBalance(int originalBalance, int expectedNewBalance) throws AddInterestException {
+    public void addInterestToSavingsAccount_shouldResultInUpdatedBalance(double originalBalance, double expectedNewBalance) throws AddInterestException {
 
         Account account = new Account(AccountType.SAVINGS);
 

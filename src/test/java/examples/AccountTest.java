@@ -35,11 +35,9 @@ public class AccountTest {
 
         Account account = new Account(AccountType.SAVINGS);
 
-        account.deposit(30);
+        account.withdraw(5);
 
-        account.withdraw(20);
-
-        assertEquals(10, account.getBalance());
+        assertEquals(5, account.getBalance());
     }
 
     @Test
@@ -49,16 +47,16 @@ public class AccountTest {
 
         account.deposit(30);
 
-        assertThrows(WithdrawException.class, () -> account.withdraw(40));
+        assertThrows(WithdrawException.class, () -> account.withdraw(50));
     }
 
     @ParameterizedTest
-    @CsvSource({"100, 101", "2000, 2040", "6000, 6180"})
-    public void addInterestToSavingsAccount_shouldResultInUpdatedBalance(double originalBalance, double expectedNewBalance) throws AddInterestException {
+    @CsvSource({"100, 111.1", "2000, 2050.2", "6000, 6190.3"})
+    public void addInterestToSavingsAccount_shouldResultInUpdatedBalance(double amountToDeposit, double expectedNewBalance) throws AddInterestException {
 
         Account account = new Account(AccountType.SAVINGS);
 
-        account.deposit(originalBalance);
+        account.deposit(amountToDeposit);
 
         account.addInterest();
 

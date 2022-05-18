@@ -20,7 +20,9 @@ public class Account {
 
         this.type = type;
         this.number = 12345;
-        this.balance = 0;
+
+        // New savings accounts are loaded with $10 by default
+        this.balance = type.equals(AccountType.SAVINGS) ? 10 : 0;
 
         this.interestAdded = false;
     }

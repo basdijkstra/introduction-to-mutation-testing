@@ -13,8 +13,6 @@ public class Account {
     private final Map<String, Transaction> transactionList = new HashMap<String, Transaction>();
     private final TransactionProcessor transactionProcessor = new TransactionProcessor();
 
-    private boolean interestAdded;
-
     public Account(AccountType type) {
 
         this.type = type;
@@ -22,8 +20,6 @@ public class Account {
 
         // New savings accounts are loaded with $10 by default
         this.balance = type.equals(AccountType.SAVINGS) ? 10 : 0;
-
-        this.interestAdded = false;
     }
 
     public double getBalance() {
@@ -83,12 +79,5 @@ public class Account {
         else {
             this.balance *= 1.03; // 3% interest
         }
-
-        setInterestAdded(true);
-    }
-
-    private void setInterestAdded(boolean value) {
-
-        this.interestAdded = value;
     }
 }

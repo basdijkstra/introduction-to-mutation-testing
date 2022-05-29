@@ -16,6 +16,8 @@ public class AccountTest {
         account.deposit(100);
 
         assertEquals(100, account.getBalance());
+
+        assertEquals(1, account.getTransactionList().size());
     }
 
     @Test
@@ -26,6 +28,8 @@ public class AccountTest {
         account.withdraw(10);
 
         assertEquals(0, account.getBalance());
+
+        assertEquals(1, account.getTransactionList().size());
     }
 
     @Test

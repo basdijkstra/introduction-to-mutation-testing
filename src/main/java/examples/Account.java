@@ -27,6 +27,11 @@ public class Account {
         return this.balance;
     }
 
+    public Map<String, Transaction> getTransactionList() {
+
+        return this.transactionList;
+    }
+
     public void printTransactionList() {
 
         this.transactionProcessor.print(this.transactionList);

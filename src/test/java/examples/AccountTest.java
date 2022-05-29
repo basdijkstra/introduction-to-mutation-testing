@@ -19,6 +19,16 @@ public class AccountTest {
     }
 
     @Test
+    public void deposit100_withDraw100_fromSavingsAccount_checkBalance_shouldBe0() throws WithdrawException {
+
+        Account account = new Account(AccountType.SAVINGS);
+
+        account.withdraw(10);
+
+        assertEquals(0, account.getBalance());
+    }
+
+    @Test
     public void overdrawFromCheckingAccount_shouldBePossible() throws WithdrawException {
 
         Account account = new Account(AccountType.CHECKING);

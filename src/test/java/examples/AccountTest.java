@@ -69,7 +69,7 @@ public class AccountTest {
     }
 
     @ParameterizedTest
-    @CsvSource({"100, 111.1", "2000, 2050.2", "6000, 6190.3"})
+    @CsvSource({"90, 101", "990, 1020", "4990, 5150"})
     public void addInterestToSavingsAccount_shouldResultInUpdatedBalance(double amountToDeposit, double expectedNewBalance) throws AddInterestException {
 
         Account account = new Account(AccountType.SAVINGS);

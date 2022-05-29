@@ -50,6 +50,14 @@ public class AccountTest {
         assertThrows(WithdrawException.class, () -> account.withdraw(50));
     }
 
+    @Test
+    public void addInterestToCheckingAccount_shouldThrowAddInterestException() {
+
+        Account account = new Account(AccountType.CHECKING);
+
+        assertThrows(AddInterestException.class, account::addInterest);
+    }
+
     @ParameterizedTest
     @CsvSource({"100, 111.1", "2000, 2050.2", "6000, 6190.3"})
     public void addInterestToSavingsAccount_shouldResultInUpdatedBalance(double amountToDeposit, double expectedNewBalance) throws AddInterestException {

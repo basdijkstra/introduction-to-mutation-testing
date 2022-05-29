@@ -49,7 +49,7 @@
                         <mutator>DEFAULTS</mutator>
                     </mutators>
                     <targetClasses>
-                        <param>examples.*</param>
+                        <param>examples.Account*</param>
                     </targetClasses>
                     <targetTests>
                         <param>examples.*</param>

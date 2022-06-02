@@ -32,11 +32,6 @@ public class Account {
         return this.transactionList;
     }
 
-    public void printTransactionList() {
-
-        this.transactionProcessor.print(this.transactionList);
-    }
-
     public void deposit(double amountToDeposit) {
 
         this.balance += amountToDeposit;

@@ -9,10 +9,10 @@
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
-        <junit.version>5.7.2</junit.version>
-        <maven.surefire.plugin.version>3.0.0-M5</maven.surefire.plugin.version>
-        <pitest.version>1.7.6</pitest.version>
-        <pitest.junit5.plugin.version>0.14</pitest.junit5.plugin.version>
+        <junit.version>5.10.0</junit.version>
+        <maven.surefire.plugin.version>3.1.2</maven.surefire.plugin.version>
+        <pitest.version>1.14.4</pitest.version>
+        <pitest.junit5.plugin.version>1.2.0</pitest.junit5.plugin.version>
     </properties>
     <dependencies>
         <dependency>

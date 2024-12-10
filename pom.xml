@@ -46,7 +46,7 @@
                 <version>${pitest.version}</version>
                 <configuration>
                     <mutators>
-                        <mutator>DEFAULTS</mutator>
+                        <mutator>STRONGER</mutator>
                     </mutators>
                     <targetClasses>
                         <param>examples.*</param>

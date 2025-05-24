@@ -1,9 +1,12 @@
 package com.ontestautomation.mutationbank;
 
+import com.ontestautomation.mutationbank.clients.AccountClient;
 import com.ontestautomation.mutationbank.models.AccountDto;
 import com.ontestautomation.mutationbank.models.AccountType;
 import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,17 +23,15 @@ public class MutationBankApplicationTests {
 
 	private RequestSpecification requestSpec;
 
+	private AccountClient accountClient;
+
 	@LocalServerPort
 	int port;
 
 	@BeforeEach
 	public void createRequestSpecification() {
 
-		requestSpec = new RequestSpecBuilder()
-				.setBaseUri("http://localhost")
-				.setPort(port)
-				.setContentType("application/json")
-				.build();
+		this.accountClient = new AccountClient("http://localhost", this.port);
 	}
 
 	@Test
@@ -38,39 +39,28 @@ public class MutationBankApplicationTests {
 
 		AccountDto account = new AccountDto(AccountType.CHECKING);
 
-		int accountId = given()
-				.spec(requestSpec)
-				.body(account)
-				.when()
-				.post("/account")
-				.then()
-				.statusCode(201)
-				.extract().path("id");
+		int accountId = this.accountClient.createAccount(account);
 
-		given()
-				.spec(requestSpec)
-				.when()
-				.get("/account/" + accountId)
-				.then()
-				.statusCode(200)
-				.body("balance", equalTo(0.0F));
+		Response getAccountResponse = this.accountClient.getAccount(accountId);
+
+		Assertions.assertEquals(200, getAccountResponse.getStatusCode());
+		Assertions.assertEquals(0.0F, (Float) getAccountResponse.path("balance"));
 	}
 
 	@Test
 	public void getAccount() {
 
-		given()
-				.spec(requestSpec)
-				.when()
-				.get("/account/2")
-				.then()
-				.statusCode(404);
+		Response response = this.accountClient.getAccount(1234);
+
+		Assertions.assertEquals(404, response.getStatusCode());
 	}
 
 	@Test
 	public void deleteAccount() {
 
-		given().spec(requestSpec).when().delete("/account/5").then().statusCode(204);
+		Response response = this.accountClient.deleteAccount(9876);
+
+		Assertions.assertEquals(204, response.getStatusCode());
 	}
 
 	@Test
@@ -78,23 +68,12 @@ public class MutationBankApplicationTests {
 
 		AccountDto account = new AccountDto(AccountType.CHECKING);
 
-		int accountId = given()
-				.spec(requestSpec)
-				.body(account)
-				.when()
-				.post("/account")
-				.then()
-				.statusCode(201)
-				.extract().path("id");
+		int accountId = this.accountClient.createAccount(account);
 
-		given()
-				.spec(requestSpec)
-				.pathParam("accountId", accountId)
-				.when()
-				.post("/account/{accountId}/deposit/10")
-				.then()
-				.statusCode(200)
-				.body("balance", equalTo(10.0F));
+		Response response = this.accountClient.depositToAccount(accountId, 10);
+
+		Assertions.assertEquals(200, response.getStatusCode());
+		Assertions.assertEquals(10.0F, (Float) response.path("balance"));
 	}
 
 	@Test
@@ -102,30 +81,12 @@ public class MutationBankApplicationTests {
 
 		AccountDto account = new AccountDto(AccountType.SAVINGS);
 
-		int accountId = given()
-				.spec(requestSpec)
-				.body(account)
-				.when()
-				.post("/account")
-				.then()
-				.statusCode(201)
-				.extract().path("id");
+		int accountId = this.accountClient.createAccount(account);
 
-		given()
-				.spec(requestSpec)
-				.pathParam("accountId", accountId)
-				.when()
-				.post("/account/{accountId}/deposit/10")
-				.then()
-				.statusCode(200)
-				.body("balance", equalTo(10.0F));
+		this.accountClient.depositToAccount(accountId, 10);
 
-		given()
-				.spec(requestSpec)
-				.pathParam("accountId", accountId)
-				.when()
-				.post("/account/{accountId}/withdraw/20")
-				.then()
-				.statusCode(400);
+		Response response = this.accountClient.withdrawFromAccount(accountId, 20);
+
+		Assertions.assertEquals(400, response.getStatusCode());
 	}
 }

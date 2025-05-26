@@ -1,6 +1,7 @@
 package com.ontestautomation.mutationbank;
 
 import com.ontestautomation.mutationbank.clients.AccountClient;
+import com.ontestautomation.mutationbank.logic.InterestLogic;
 import com.ontestautomation.mutationbank.models.AccountDto;
 import com.ontestautomation.mutationbank.models.AccountType;
 import io.restassured.response.Response;
@@ -80,6 +81,24 @@ public class MutationBankApplicationTests {
 	}
 
 	@Test
+	public void withdrawFromCheckingAccount_whenRetrieved_shouldShowUpdatedBalance() {
+
+		// Create a new checking account
+		AccountDto account = new AccountDto(AccountType.CHECKING);
+		int accountId = this.accountClient.createAccount(account);
+
+		// Deposit initial balance
+		this.accountClient.depositToAccount(accountId, 200);
+
+		// Withdraw from account
+		Response response = this.accountClient.withdrawFromAccount(accountId, 150);
+
+		// Check that the withdrawal is processed correctly and that the balance is updated
+		Assertions.assertEquals(200, response.getStatusCode());
+		Assertions.assertEquals(50.0F, (Float) response.path("balance"));
+	}
+
+	@Test
 	public void overdrawOnSavingsAccount_shouldReturn400_shouldNotImpactBalance() {
 
 		// Create a new savings account
@@ -101,24 +120,51 @@ public class MutationBankApplicationTests {
 
 	@ParameterizedTest
 	@CsvSource({
-			"100, 101.0F",
-			"3000, 3060.0F",
-			"6000, 6180.0F"
+			"100, 101",
+			"1000, 1020",
+			"5000, 5150"
 	})
-	public void addInterestToSavingsAccount_shouldUpdateBalanceCorrectly
-			(int amountToDeposit, float expectedBalance) {
+	public void updateBalanceWithInterest_shouldReturnCorrectUpdatedBalance
+			(double initialBalance, double expectedNewBalance) {
+
+		double actualNewBalance = InterestLogic.addInterestToBalance(initialBalance);
+
+		Assertions.assertEquals(expectedNewBalance, actualNewBalance);
+	}
+
+	@Test
+	public void addInterestToSavingsAccount_shouldUpdateBalanceCorrectly() {
 
 		// Create a new savings account
 		AccountDto account = new AccountDto(AccountType.SAVINGS);
 		int accountId = this.accountClient.createAccount(account);
 
 		// Set the balance
-		this.accountClient.depositToAccount(accountId, amountToDeposit);
+		this.accountClient.depositToAccount(accountId, 100);
 
 		// Add interest
 		Response response = this.accountClient.addInterestToAccount(accountId);
 
 		// Check that the balance is updated correctly
-		Assertions.assertEquals(expectedBalance, (Float) response.path("balance"));
+		Assertions.assertEquals(101.0F, (Float) response.path("balance"));
+	}
+
+	@Test
+	public void addInterestToCheckingAccount_shouldReturn400_shouldNotImpactBalance() {
+
+		// Create a new checking account
+		AccountDto account = new AccountDto(AccountType.CHECKING);
+		int accountId = this.accountClient.createAccount(account);
+
+		// Set the balance
+		this.accountClient.depositToAccount(accountId, 100);
+
+		// Try to add interest and verify that this yields an HTTP 400
+		Response response = this.accountClient.addInterestToAccount(accountId);
+		Assertions.assertEquals(400, response.getStatusCode());
+
+		// Check that the balance has not changed and still is 100
+		Response getResponse = this.accountClient.getAccount(accountId);
+		Assertions.assertEquals(100.0F, (Float) getResponse.path("balance"));
 	}
 }

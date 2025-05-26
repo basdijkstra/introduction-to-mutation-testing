@@ -2,6 +2,7 @@ package com.ontestautomation.mutationbank.services;
 
 import com.ontestautomation.mutationbank.exceptions.BadRequestException;
 import com.ontestautomation.mutationbank.exceptions.ResourceNotFoundException;
+import com.ontestautomation.mutationbank.logic.InterestLogic;
 import com.ontestautomation.mutationbank.models.Account;
 import com.ontestautomation.mutationbank.models.AccountType;
 import com.ontestautomation.mutationbank.repositories.AccountRepository;
@@ -74,15 +75,8 @@ public class AccountService {
 
         double currentBalance = accountPersisted.getBalance();
 
-        if (currentBalance < 1000) {
-            accountPersisted.setBalance(currentBalance * 1.01);
-        }
-        else if (currentBalance < 5000) {
-            accountPersisted.setBalance(currentBalance * 1.02);
-        }
-        else {
-            accountPersisted.setBalance(currentBalance * 1.03);
-        }
+        double balanceWithInterest = InterestLogic.addInterestToBalance(currentBalance);
+        accountPersisted.setBalance(balanceWithInterest);
 
         return accountRepository.save(accountPersisted);
     }

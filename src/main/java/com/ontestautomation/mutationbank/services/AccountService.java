@@ -64,6 +64,30 @@ public class AccountService {
     }
 
     @Transactional
+    public Account addInterest(Long id) {
+
+        var accountPersisted = getAccount(id);
+
+        if (accountPersisted.getType().equals(AccountType.CHECKING)) {
+            throw new BadRequestException("Cannot add interest to checking account " + id);
+        }
+
+        double currentBalance = accountPersisted.getBalance();
+
+        if (currentBalance < 1000) {
+            accountPersisted.setBalance(currentBalance * 1.01);
+        }
+        else if (currentBalance < 5000) {
+            accountPersisted.setBalance(currentBalance * 1.02);
+        }
+        else {
+            accountPersisted.setBalance(currentBalance * 1.03);
+        }
+
+        return accountRepository.save(accountPersisted);
+    }
+
+    @Transactional
     public void deleteAccount(Long id) {
         accountRepository.deleteById(id);
     }

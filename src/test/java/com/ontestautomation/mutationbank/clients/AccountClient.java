@@ -34,6 +34,17 @@ public class AccountClient extends AccountBase {
                 .extract().response();
     }
 
+    public Response addInterestToAccount(int accountId) {
+
+        return given()
+                .spec(super.requestSpec())
+                .pathParam("accountId", accountId)
+                .when()
+                .post("/account/{accountId}/interest")
+                .then()
+                .extract().response();
+    }
+
     public Response deleteAccount(int accountId) {
 
         return given()

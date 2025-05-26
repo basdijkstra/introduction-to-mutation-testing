@@ -45,6 +45,12 @@ public class AccountController {
         return ResponseEntity.status(HttpStatus.OK).body(accountService.processWithdrawal(id, amount));
     }
 
+    @PostMapping(path = "/{id}/interest", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Account> addInterestToAccount(@PathVariable("id") Long id) {
+
+        return ResponseEntity.status(HttpStatus.OK).body(accountService.addInterest(id));
+    }
+
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Account>> getAllAccounts() {
 

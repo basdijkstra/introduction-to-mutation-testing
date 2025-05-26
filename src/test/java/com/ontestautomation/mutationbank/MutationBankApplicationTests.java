@@ -8,6 +8,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -95,5 +97,28 @@ public class MutationBankApplicationTests {
 		// Check that the account balance is unchanged
 		Response getResponse = this.accountClient.getAccount(accountId);
 		Assertions.assertEquals(10.0F, (Float) getResponse.path("balance"));
+	}
+
+	@ParameterizedTest
+	@CsvSource({
+			"100, 101.0F",
+			"3000, 3060.0F",
+			"6000, 6180.0F"
+	})
+	public void addInterestToSavingsAccount_shouldUpdateBalanceCorrectly
+			(int amountToDeposit, float expectedBalance) {
+
+		// Create a new savings account
+		AccountDto account = new AccountDto(AccountType.SAVINGS);
+		int accountId = this.accountClient.createAccount(account);
+
+		// Set the balance
+		this.accountClient.depositToAccount(accountId, amountToDeposit);
+
+		// Add interest
+		Response response = this.accountClient.addInterestToAccount(accountId);
+
+		// Check that the balance is updated correctly
+		Assertions.assertEquals(expectedBalance, (Float) response.path("balance"));
 	}
 }

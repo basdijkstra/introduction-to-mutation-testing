@@ -34,6 +34,16 @@ public class AccountClient extends AccountBase {
                 .extract().response();
     }
 
+    public Response getAllAccounts() {
+
+        return given()
+                .spec(super.requestSpec())
+                .when()
+                .get("/account")
+                .then()
+                .extract().response();
+    }
+
     public Response addInterestToAccount(int accountId) {
 
         return given()

@@ -15,6 +15,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.ArrayList;
+
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class MutationBankApplicationTests {
@@ -53,6 +55,18 @@ public class MutationBankApplicationTests {
 
 		// Check the response status code
 		Assertions.assertEquals(404, response.getStatusCode());
+	}
+
+	@Test
+	public void createNewAccount_retrieveAllAccounts_shouldContainCreatedAccount() {
+
+		AccountDto account = new AccountDto(AccountType.CHECKING);
+		int accountId = this.accountClient.createAccount(account);
+
+		Response response = this.accountClient.getAllAccounts();
+
+		Assertions.assertEquals(200, response.getStatusCode());
+		Assertions.assertTrue(((ArrayList<?>)response.path("id")).contains(accountId));
 	}
 
 	@Test

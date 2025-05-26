@@ -66,6 +66,16 @@ public class AccountClient extends AccountBase {
                 .extract().response();
     }
 
+    public Response deleteAllAccounts() {
+
+        return given()
+                .spec(super.requestSpec())
+                .when()
+                .delete("/account")
+                .then()
+                .extract().response();
+    }
+
     public Response depositToAccount(int accountId, double amount) {
 
         return given()

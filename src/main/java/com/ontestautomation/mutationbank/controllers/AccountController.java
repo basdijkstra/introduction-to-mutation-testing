@@ -70,4 +70,12 @@ public class AccountController {
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+
+    @DeleteMapping
+    public ResponseEntity<?> deleteAllAccounts() {
+
+        accountService.deleteAllAccounts();
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 }

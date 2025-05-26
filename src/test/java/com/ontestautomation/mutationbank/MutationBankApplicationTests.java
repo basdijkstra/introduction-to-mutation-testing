@@ -5,9 +5,7 @@ import com.ontestautomation.mutationbank.logic.InterestLogic;
 import com.ontestautomation.mutationbank.models.AccountDto;
 import com.ontestautomation.mutationbank.models.AccountType;
 import io.restassured.response.Response;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -55,6 +53,16 @@ public class MutationBankApplicationTests {
 
 		// Check the response status code
 		Assertions.assertEquals(404, response.getStatusCode());
+	}
+
+	@Test
+	public void retrieveAllAccounts_noAccountsPresent_shouldReturnHttp204() {
+
+		this.accountClient.deleteAllAccounts();
+
+		Response response = this.accountClient.getAllAccounts();
+
+		Assertions.assertEquals(204, response.getStatusCode());
 	}
 
 	@Test

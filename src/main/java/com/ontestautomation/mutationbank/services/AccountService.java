@@ -85,4 +85,9 @@ public class AccountService {
     public void deleteAccount(Long id) {
         accountRepository.deleteById(id);
     }
+
+    @Transactional
+    public void deleteAllAccounts() {
+        accountRepository.deleteAll();
+    }
 }

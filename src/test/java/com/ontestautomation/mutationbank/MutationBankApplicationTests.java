@@ -28,7 +28,7 @@ public class MutationBankApplicationTests {
 	}
 
 	@Test
-	public void createAccount() {
+	public void createNewCheckingAccount_whenRetrieved_shouldHaveZeroBalance() {
 
 		// Create a new checking account
 		AccountDto account = new AccountDto(AccountType.CHECKING);
@@ -43,7 +43,7 @@ public class MutationBankApplicationTests {
 	}
 
 	@Test
-	public void getAccount() {
+	public void getNonexistentAccount_shouldReturn404() {
 
 		// GET an account that should not exist
 		Response response = this.accountClient.getAccount(1234);
@@ -53,7 +53,7 @@ public class MutationBankApplicationTests {
 	}
 
 	@Test
-	public void deleteAccount() {
+	public void deleteNonexistentAccount_shouldReturn204() {
 
 		// DELETE an account that does not exist
 		Response response = this.accountClient.deleteAccount(9876);
@@ -63,7 +63,7 @@ public class MutationBankApplicationTests {
 	}
 
 	@Test
-	public void testDeposit() {
+	public void depositIntoCheckingAccount_whenRetrieved_shouldShowUpdatedBalance() {
 
 		// Create a new checking account
 		AccountDto account = new AccountDto(AccountType.CHECKING);
@@ -78,7 +78,7 @@ public class MutationBankApplicationTests {
 	}
 
 	@Test
-	public void testOverdrawOnSavingsAccount() {
+	public void overdrawOnSavingsAccount_shouldReturn400_shouldNotImpactBalance() {
 
 		// Create a new savings account
 		AccountDto account = new AccountDto(AccountType.SAVINGS);

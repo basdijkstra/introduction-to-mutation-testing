@@ -189,4 +189,30 @@ public class MutationBankApplicationTests {
 		Response getResponse = this.accountClient.getAccount(accountId);
 		Assertions.assertEquals(100.0F, (Float) getResponse.path("balance"));
 	}
+
+	@Test
+	public void withdrawEntireBalanceFromSavingsAccount_shouldReturn200_shouldSetBalanceToZero() {
+
+		AccountDto account = new AccountDto(AccountType.SAVINGS);
+		int accountId = this.accountClient.createAccount(account);
+
+		this.accountClient.depositToAccount(accountId, 100);
+		Response response = this.accountClient.withdrawFromAccount(accountId, 100);
+
+		Assertions.assertEquals(200, response.getStatusCode());
+		Assertions.assertEquals(0.0F, (Float) response.path("balance"));
+	}
+
+	@Test
+	public void overdrawOnCheckingAccount_shouldReturn200_shouldSetBalanceToNegative() {
+
+		AccountDto account = new AccountDto(AccountType.CHECKING);
+		int accountId = this.accountClient.createAccount(account);
+
+		this.accountClient.depositToAccount(accountId, 100);
+		Response response = this.accountClient.withdrawFromAccount(accountId, 150);
+
+		Assertions.assertEquals(200, response.getStatusCode());
+		Assertions.assertEquals(-50.0F, (Float) response.path("balance"));
+	}
 }
